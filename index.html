@@ -386,6 +386,79 @@ footer a:hover { color: var(--accent); text-decoration: none; }
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
 .reveal.in { opacity: 1; transform: none; }
 
+/* ENHANCED PORTFOLIO FEATURES */
+body { opacity: 0; animation: pageLoad 0.65s ease forwards; }
+@keyframes pageLoad { from { opacity: 0; } to { opacity: 1; } }
+
+.hero-name-wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.open-work {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(0,255,136,0.35); padding: 5px 9px;
+  background: rgba(0,255,136,0.04);
+}
+.open-work::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 8px var(--accent);
+}
+[data-theme="light"] .open-work { border-color: rgba(0,122,61,0.35); background: rgba(0,122,61,0.04); }
+
+.role-typing { color: var(--text); }
+.role-cursor {
+  display: inline-block; width: 7px; height: 1.05em;
+  margin-left: 3px; vertical-align: -0.15em;
+  background: var(--accent); animation: blink 0.8s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.nav-links a.active, .mobile-menu a.active { color: var(--accent); }
+.nav-links a.active::after {
+  content: ''; display: block; height: 1px; margin-top: 3px;
+  background: var(--accent);
+}
+
+.project-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+}
+.project-card {
+  border: 1px solid var(--border); padding: 24px;
+  background: var(--surface); transition: border-color 0.2s, transform 0.2s;
+}
+.project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.project-type {
+  font-family: var(--mono); font-size: 9px; color: var(--accent);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px;
+}
+.project-card h3 { font-size: 15px; color: var(--text); font-weight: 500; margin-bottom: 9px; }
+.project-card p { font-size: 12px; line-height: 1.7; }
+.project-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 15px; }
+.project-stack span {
+  font-family: var(--mono); font-size: 9px; color: var(--muted);
+  border: 1px solid var(--border); padding: 3px 7px;
+}
+
+.email-copy { border: 0; background: none; cursor: pointer; padding: 0; color: inherit; font: inherit; }
+.copy-status { font-size: 9px; color: var(--accent); opacity: 0; transition: opacity .2s; margin-left: 4px; }
+.copy-status.show { opacity: 1; }
+
+#backTop {
+  position: fixed; right: 28px; bottom: 88px; z-index: 190;
+  width: 42px; height: 42px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--muted); cursor: pointer;
+  font-family: var(--mono); font-size: 16px;
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity .2s, visibility .2s, transform .2s, color .2s, border-color .2s;
+}
+#backTop.show { opacity: 1; visibility: visible; transform: none; }
+#backTop:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 720px) {
+  .project-grid { grid-template-columns: 1fr; }
+  .hero-name-wrap { gap: 9px; }
+  #backTop { right: 24px; bottom: 84px; }
+}
+
 /* RESPONSIVE */
 @media (max-width: 720px) {
   nav { padding: 18px 24px; }
@@ -416,6 +489,7 @@ footer a:hover { color: var(--accent); text-decoration: none; }
   <ul class="nav-links">
     <li><a href="#about">about</a></li>
     <li><a href="#experience">experience</a></li>
+    <li><a href="#projects">projects</a></li>
     <li><a href="#skills">skills</a></li>
     <li><a href="#certifications">certs</a></li>
     <li><a href="#contact">contact</a></li>
@@ -431,6 +505,7 @@ footer a:hover { color: var(--accent); text-decoration: none; }
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about">about</a>
   <a href="#experience">experience</a>
+  <a href="#projects">projects</a>
   <a href="#skills">skills</a>
   <a href="#certifications">certs</a>
   <a href="#contact">contact</a>
@@ -442,8 +517,11 @@ footer a:hover { color: var(--accent); text-decoration: none; }
     <div class="hero-layout">
       <div>
         <div class="hero-tag">IT Infrastructure Engineer</div>
-        <h1 class="hero-name">Ifeoluwa<br>Aiyenigba</h1>
-        <p class="hero-role">Systems Administration &nbsp;/&nbsp; Networking &nbsp;/&nbsp; Cybersecurity</p>
+        <div class="hero-name-wrap">
+          <h1 class="hero-name">Ifeoluwa<br>Aiyenigba</h1>
+          <span class="open-work">Open to work</span>
+        </div>
+        <p class="hero-role"><span class="role-typing" id="roleTyping"></span><span class="role-cursor" aria-hidden="true"></span></p>
         <p class="hero-desc">3+ years building and maintaining enterprise IT environments across multi-site organisations in retail, healthcare, and academia. Based in Lagos, Nigeria.</p>
         <div class="hero-actions">
           <a href="#experience" class="btn btn-accent">View work</a>
@@ -562,11 +640,42 @@ footer a:hover { color: var(--accent); text-decoration: none; }
   </div>
 </section>
 
+<!-- PROJECTS -->
+<section id="projects" class="reveal">
+  <div class="page">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Projects</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="project-grid">
+      <article class="project-card">
+        <div class="project-type">Automation</div>
+        <h3>PowerShell Account Provisioning</h3>
+        <p>Automated account provisioning and repeatable IT deployment tasks with PowerShell, reducing deployment time by over 90%.</p>
+        <div class="project-stack"><span>PowerShell</span><span>Active Directory</span><span>Windows</span></div>
+      </article>
+      <article class="project-card">
+        <div class="project-type">Infrastructure</div>
+        <h3>Network Segmentation</h3>
+        <p>Internal network segmentation work at Mattoris to improve separation of business systems, endpoints, and network traffic.</p>
+        <div class="project-stack"><span>VLANs</span><span>Routing</span><span>Switching</span><span>Network Security</span></div>
+      </article>
+      <article class="project-card">
+        <div class="project-type">Infrastructure</div>
+        <h3>CBT Infrastructure Setup</h3>
+        <p>Supported CBT infrastructure at Taraba State University, including system deployment, diagnostics, maintenance, and technical support.</p>
+        <div class="project-stack"><span>Windows</span><span>Networking</span><span>Hardware</span><span>CBT</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- SKILLS -->
 <section id="skills" class="reveal">
   <div class="page">
     <div class="sec-head">
-      <span class="sec-num">03</span>
+      <span class="sec-num">04</span>
       <span class="sec-title">Skills</span>
       <div class="sec-line"></div>
     </div>
@@ -599,7 +708,7 @@ footer a:hover { color: var(--accent); text-decoration: none; }
 <section id="certifications" class="reveal">
   <div class="page">
     <div class="sec-head">
-      <span class="sec-num">04</span>
+      <span class="sec-num">05</span>
       <span class="sec-title">Certifications</span>
       <div class="sec-line"></div>
     </div>
@@ -617,17 +726,19 @@ footer a:hover { color: var(--accent); text-decoration: none; }
 <section id="contact" class="reveal">
   <div class="page">
     <div class="sec-head">
-      <span class="sec-num">05</span>
+      <span class="sec-num">06</span>
       <span class="sec-title">Contact</span>
       <div class="sec-line"></div>
     </div>
     <div class="contact-layout">
       <div class="contact-links">
         <p>Open to new opportunities. Reach out directly or use the form.</p>
-        <a class="c-link" href="mailto:ifeaiyenigba@gmail.com">
+        <div class="c-link">
           <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          ifeaiyenigba@gmail.com
-        </a>
+          <a class="email-copy" href="mailto:ifeaiyenigba@gmail.com" title="Click to email">ifeaiyenigba@gmail.com</a>
+          <button class="email-copy" id="copyEmail" type="button" title="Copy email" aria-label="Copy email">⧉</button>
+          <span class="copy-status" id="copyStatus">copied</span>
+        </div>
         <a class="c-link" href="tel:+2348148560602">
           <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
           +234 814 856 0602
@@ -636,46 +747,33 @@ footer a:hover { color: var(--accent); text-decoration: none; }
           <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           LinkedIn
         </a>
+        <!-- Replace # with your GitHub profile URL when ready. -->
+        <a class="c-link" href="#" id="githubLink" target="_blank" rel="noopener" title="Add your GitHub profile URL">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.15c-3.2.69-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.77.11 3.06.73.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.07.78 2.16v3.2c0 .31.21.67.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+          GitHub
+        </a>
         <a class="c-link" href="https://wa.me/2348148560602" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp
         </a>
         <a href="#" id="cvBtn2" download="Aiyenigba_Ifeoluwa_CV.pdf" class="btn btn-outline" style="margin-top:8px">↓ Download CV</a>
       </div>
-      <div data-fs-success style="display:none;font-family:'JetBrains Mono',monospace;font-size:11px;padding:12px 14px;border:1px solid var(--accent);color:var(--accent);letter-spacing:0.06em;">Message sent. I will get back to you soon.</div>
-      <div data-fs-error style="display:none;font-family:'JetBrains Mono',monospace;font-size:11px;padding:12px 14px;border:1px solid #ff4444;color:#ff4444;letter-spacing:0.06em;"></div>
-
-      <form class="form" id="contactForm">
+      <form class="form" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
         <div class="form-row">
-          <div class="field">
-            <label for="fname">Name</label>
-            <input type="text" id="fname" name="name" data-fs-field required>
-            <span data-fs-error="name" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#ff4444;"></span>
-          </div>
-          <div class="field">
-            <label for="femail">Email</label>
-            <input type="email" id="femail" name="email" data-fs-field required>
-            <span data-fs-error="email" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#ff4444;"></span>
-          </div>
+          <div class="field"><label>Name</label><input type="text" name="name" required></div>
+          <div class="field"><label>Email</label><input type="email" name="email" required></div>
         </div>
-        <div class="field">
-          <label for="fmsg">Message</label>
-          <textarea id="fmsg" name="message" data-fs-field required></textarea>
-          <span data-fs-error="message" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#ff4444;"></span>
-        </div>
+        <div class="field"><label>Message</label><textarea name="message" required></textarea></div>
         <div>
-          <button type="submit" data-fs-submit-btn class="btn btn-accent">Send message</button>
+          <button type="submit" class="btn btn-accent">Send message</button>
         </div>
+        <div id="fstatus"></div>
       </form>
-
-      <script>
-        window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-        formspree('initForm', { formElement: '#contactForm', formId: 'xaenlrbg' });
-      </script>
-      <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
     </div>
   </div>
 </section>
+
+<button id="backTop" type="button" aria-label="Back to top" title="Back to top">↑</button>
 
 <footer>
   <span>&copy; 2026 Ifeoluwa Jonathan Aiyenigba</span>
@@ -714,6 +812,98 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+// Form
+const form   = document.getElementById('contactForm');
+const status = document.getElementById('fstatus');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const action = form.action;
+  if(action.includes('YOUR_FORM_ID')){
+    status.className = 'ok';
+    status.textContent = 'Replace YOUR_FORM_ID with your Formspree ID to receive emails.';
+    return;
+  }
+  try {
+    const res = await fetch(action, { method:'POST', body: new FormData(form), headers:{'Accept':'application/json'} });
+    if(res.ok){ status.className='ok'; status.textContent='Message sent.'; form.reset(); }
+    else { status.className='err'; status.textContent='Something went wrong. Email me directly.'; }
+  } catch { status.className='err'; status.textContent='Network error.'; }
+});
+
+// Typing animation
+const roleEl = document.getElementById('roleTyping');
+const roles = ['Systems Administrator', 'Network Engineer', 'IT Infrastructure Engineer'];
+let roleIndex = 0, charIndex = 0, deleting = false;
+function typeRole() {
+  if (!roleEl) return;
+  const role = roles[roleIndex];
+  roleEl.textContent = role.slice(0, charIndex);
+  if (!deleting && charIndex < role.length) {
+    charIndex++;
+    setTimeout(typeRole, 75);
+  } else if (!deleting && charIndex === role.length) {
+    deleting = true;
+    setTimeout(typeRole, 1500);
+  } else if (deleting && charIndex > 0) {
+    charIndex--;
+    setTimeout(typeRole, 38);
+  } else {
+    deleting = false;
+    roleIndex = (roleIndex + 1) % roles.length;
+    setTimeout(typeRole, 300);
+  }
+}
+typeRole();
+
+// Active navigation highlight
+const sections = [...document.querySelectorAll('section[id]:not(#hero)')];
+const navLinks = [...document.querySelectorAll('.nav-links a, .mobile-menu a')];
+const setActiveNav = id => {
+  navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${id}`));
+};
+const navObserver = new IntersectionObserver(entries => {
+  const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
+  if (visible[0]) setActiveNav(visible[0].target.id);
+}, { rootMargin: '-25% 0px -55% 0px', threshold: [0.05, 0.2, 0.5] });
+sections.forEach(section => navObserver.observe(section));
+
+// Back to top
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('show', window.scrollY > 500);
+}, { passive: true });
+backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// Copy email
+const copyEmail = document.getElementById('copyEmail');
+const copyStatus = document.getElementById('copyStatus');
+if (copyEmail) {
+  copyEmail.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText('ifeaiyenigba@gmail.com');
+      copyStatus.classList.add('show');
+      setTimeout(() => copyStatus.classList.remove('show'), 1400);
+    } catch {
+      copyStatus.textContent = 'copy failed';
+      copyStatus.classList.add('show');
+      setTimeout(() => {
+        copyStatus.textContent = 'copied';
+        copyStatus.classList.remove('show');
+      }, 1400);
+    }
+  });
+}
+
+// Keep the GitHub item intentionally unconfigured until a real profile URL is supplied.
+const githubLink = document.getElementById('githubLink');
+if (githubLink) {
+  githubLink.addEventListener('click', e => {
+    if (githubLink.getAttribute('href') === '#') {
+      e.preventDefault();
+      githubLink.title = 'Add your GitHub profile URL in index.html';
+    }
+  });
+}
 
 </script>
 </body>
